@@ -1,0 +1,23 @@
+{
+  "name": "paracel-prtotype-kit",
+  "version": "1.0.0",
+  "description": "prototype tool with parcel",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "00": "parcel src/00-typography/index.html --no-hmr --port 1234  --out-dir sketches/00-typography",
+    "d00": "parcel build src/00-typography/index.html --out-dir sketches/00-typography --public-url ./  --no-source-maps",
+    "dist": "python -m SimpleHTTPServer 8200"
+  },
+  "dependencies": {
+    "dat.gui": "^0.7.6",
+    "gsap": "^2.1.3",
+    "stats": "^1.0.0",
+    "stats.js": "^0.17.0",
+    "three": "^0.109.0",
+    "three-orbit-controls": "^82.1.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.11.0"
+  }
+}
