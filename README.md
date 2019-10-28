@@ -1,7 +1,7 @@
 # 2019-creative-code-sketch
 
 
-### #00 文字 (#00 Typography)
+### #01 タイポグラフィ (#01 Typography)
 Demo:
 https://kenjispecial.github.io/2019-creative-code-sketch/sketches/00-typography/
 
