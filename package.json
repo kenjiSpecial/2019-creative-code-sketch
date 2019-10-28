@@ -5,8 +5,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "00": "parcel src/00-typography/index.html --no-hmr --port 1234  --out-dir sketches/00-typography",
-    "d00": "parcel build src/00-typography/index.html --out-dir sketches/00-typography --public-url ./  --no-source-maps",
+    "00": "parcel src/01-typography/index.html --no-hmr --port 1234  --out-dir sketches/00-typography",
+    "d00": "parcel build src/01-typography/index.html --out-dir sketches/00-typography --public-url ./  --no-source-maps",
     "dist": "python -m SimpleHTTPServer 8200"
   },
   "dependencies": {

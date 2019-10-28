@@ -38946,18 +38946,6 @@ u(++l%c.children.length)},!1);var k=(performance||Date).now(),g=k,a=0,r=e(new f.
 1048576,d.jsHeapSizeLimit/1048576)}return c},update:function(){k=this.end()},domElement:c,setMode:u}};f.Panel=function(e,f,l){var c=Infinity,k=0,g=Math.round,a=g(window.devicePixelRatio||1),r=80*a,h=48*a,t=3*a,v=2*a,d=3*a,m=15*a,n=74*a,p=30*a,q=document.createElement("canvas");q.width=r;q.height=h;q.style.cssText="width:80px;height:48px";var b=q.getContext("2d");b.font="bold "+9*a+"px Helvetica,Arial,sans-serif";b.textBaseline="top";b.fillStyle=l;b.fillRect(0,0,r,h);b.fillStyle=f;b.fillText(e,t,v);
 b.fillRect(d,m,n,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d,m,n,p);return{dom:q,update:function(h,w){c=Math.min(c,h);k=Math.max(k,h);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,r,m);b.fillStyle=f;b.fillText(g(h)+" "+e+" ("+g(c)+"-"+g(k)+")",t,v);b.drawImage(q,d+a,m,n-a,p,d,m,n-a,p);b.fillRect(d+n-a,m,a,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d+n-a,m,a,g((1-h/w)*p))}}};return f});
 
-},{}],"components/shaders/shader.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fragmentShader = exports.vertexShader = void 0;
-var vertexShader = "\nprecision highp float;\n\nattribute vec3 position;\nattribute vec2 uv;\n\nuniform mat4 projectionMatrix;\nuniform mat4 modelViewMatrix;\n\nvarying vec2 vUv;\n\nvoid main(){\n    vUv = uv;\n    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0);\n}\n"; // ==================
-
-exports.vertexShader = vertexShader;
-var fragmentShader = "\nprecision highp float;\n\nvarying vec2 vUv;\n\nvoid main(){\n    gl_FragColor = vec4(vUv, 0.0, 1.0);\n}\n";
-exports.fragmentShader = fragmentShader;
 },{}],"../../node_modules/gsap/TweenLite.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
@@ -49661,8 +49649,6 @@ var _dat = _interopRequireDefault(require("dat.gui"));
 
 var _stats = _interopRequireDefault(require("stats.js"));
 
-var _shader = require("./components/shaders/shader");
-
 var _TweenMax = _interopRequireWildcard(require("gsap/TweenMax"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -49693,8 +49679,7 @@ function () {
     this.makeRenderer();
     this.makeScene();
     this.makeCamera();
-    this.makeMesh(); // if (this.params.isDebug) this.setupDebug();
-
+    this.makeMesh();
     this.makeUtils();
     this.resize();
   }
@@ -49754,13 +49739,6 @@ function () {
   }, {
     key: "makeMesh",
     value: function makeMesh() {
-      // let geometry = new THREE.BoxGeometry(200, 200, 200);
-      // let mat = new THREE.RawShaderMaterial({
-      // 	vertexShader: vertexShader,
-      // 	fragmentShader: fragmentShader
-      // });
-      // this.mesh = new THREE.Mesh(geometry, mat);
-      // this.scene.add(this.mesh);
       var parent = './assets/obj/20191026ah/ah_';
       var arr = ['0.15', '0.3', '0.45', '0.6', '0.75', '0.9', '1.05', '1.2', '1.35', '1.5'];
       var total = arr.length;
@@ -49904,7 +49882,7 @@ function () {
 }();
 
 exports.default = App;
-},{"three":"../../node_modules/three/build/three.module.js","../vendors/OBJLoader":"../vendors/OBJLoader.js","three-orbit-controls":"../../node_modules/three-orbit-controls/index.js","dat.gui":"../../node_modules/dat.gui/build/dat.gui.module.js","stats.js":"../../node_modules/stats.js/build/stats.min.js","./components/shaders/shader":"components/shaders/shader.js","gsap/TweenMax":"../../node_modules/gsap/TweenMax.js"}],"demo.js":[function(require,module,exports) {
+},{"three":"../../node_modules/three/build/three.module.js","../vendors/OBJLoader":"../vendors/OBJLoader.js","three-orbit-controls":"../../node_modules/three-orbit-controls/index.js","dat.gui":"../../node_modules/dat.gui/build/dat.gui.module.js","stats.js":"../../node_modules/stats.js/build/stats.min.js","gsap/TweenMax":"../../node_modules/gsap/TweenMax.js"}],"demo.js":[function(require,module,exports) {
 'use strict';
 
 var _index = _interopRequireDefault(require("./index"));
@@ -49945,4 +49923,4 @@ window.addEventListener('keydown', function (ev) {
   app.onKeyDown(ev);
 });
 },{"./index":"index.js"}]},{},["demo.js"], null)
-//# sourceMappingURL=demo.d3b53871.js.map
+//# sourceMappingURL=/demo.d3b53871.js.map

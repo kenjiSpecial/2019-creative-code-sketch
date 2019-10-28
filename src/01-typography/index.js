@@ -6,7 +6,6 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 import dat from 'dat.gui';
 import Stats from 'stats.js';
 
-import { fragmentShader, vertexShader } from './components/shaders/shader';
 import TweenMax, { Expo, Power4 } from 'gsap/TweenMax';
 
 export default class App {
@@ -17,8 +16,6 @@ export default class App {
 		this.makeScene();
 		this.makeCamera();
 		this.makeMesh();
-
-		// if (this.params.isDebug) this.setupDebug();
 
 		this.makeUtils();
 		this.resize();
@@ -76,15 +73,6 @@ export default class App {
 	}
 
 	makeMesh() {
-		// let geometry = new THREE.BoxGeometry(200, 200, 200);
-		// let mat = new THREE.RawShaderMaterial({
-		// 	vertexShader: vertexShader,
-		// 	fragmentShader: fragmentShader
-		// });
-
-		// this.mesh = new THREE.Mesh(geometry, mat);
-
-		// this.scene.add(this.mesh);
 		const parent = './assets/obj/20191026ah/ah_';
 
 
