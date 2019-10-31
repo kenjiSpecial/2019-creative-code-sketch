@@ -1,0 +1,1 @@
+export const url = 'http://colormind.io/api/';
