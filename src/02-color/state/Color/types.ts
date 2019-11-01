@@ -25,9 +25,10 @@ export interface ColorUpdateAction extends Action {
 	colors: IColor[];
 }
 
+
 export interface SelectColorAction extends Action {
 	type: ColorActionType.SELECT_COLOR;
-	colors: IColor[];
+	color: IColor;
 }
 
 export interface NotSelectColorAction extends Action {

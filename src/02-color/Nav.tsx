@@ -20,7 +20,7 @@ export class Nav extends Component{
 
     render(){
         return (
-            <div>
+            <div style={{position: "absolute", bottom:40, right: 40}}>
                 <div onClick={this.onClickSelectResult}>結果を見る</div>
                 <div onClick={this.onClickSelectColors}>色を選ぶ</div>
             </div>

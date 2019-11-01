@@ -6,9 +6,10 @@ import { ColorPick } from './ColorPick';
 export class Colors extends Component<{}, {}> {
 	render() {
 		return (
-			<div>
-                <Nav />
+			<div className={'fullSize'} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+				
                 <ColorPick />
+                <Nav />
 			</div>
 		);
 	}
