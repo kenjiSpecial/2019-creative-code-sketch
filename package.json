@@ -8,6 +8,7 @@
     "01": "parcel src/01-typography/index.html --no-hmr --port 1234  --out-dir sketches/01-typography",
     "02": "parcel src/02-color/index.html --no-hmr --port 1234  --out-dir sketches/02-color",
     "d01": "rm -rf sketches/01-typography/*.js && parcel build src/01-typography/index.html --out-dir sketches/01-typography --public-url ./  --no-source-maps",
+    "d02": "rm -rf sketches/02-color/*.js && parcel build src/02-color/index.html --out-dir sketches/02-color --public-url ./  --no-source-maps",
     "dist": "python -m SimpleHTTPServer 8200"
   },
   "dependencies": {

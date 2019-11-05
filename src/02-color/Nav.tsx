@@ -1,29 +1,74 @@
-
 import * as React from 'react';
 import { Component } from 'react';
+import { store, State } from './state/index';
+import { updatePage } from './state/App/actions';
+import { Page } from './state/App/types';
 
-export class Nav extends Component{
-    constructor(props = {}){
-        super(props);
+interface IState {
+	color: string;
+}
 
-        this.onClickSelectResult = this.onClickSelectResult.bind(this)
-        this.onClickSelectColors = this.onClickSelectColors.bind(this)
-    }
+export class Nav extends Component<{}, IState> {
+	state = {
+		color: '#000000'
+	};
 
-    onClickSelectResult(){
-        console.log('onClickSelectResult');
-    }
+	constructor(props = {}) {
+		super(props);
 
-    onClickSelectColors(){
-        console.log('onClickSelectColors');
-    }
+		this.onClickSelectResult = this.onClickSelectResult.bind(this);
+		this.onClickSelectColors = this.onClickSelectColors.bind(this);
+	}
 
-    render(){
-        return (
-            <div style={{position: "absolute", bottom:40, right: 40}}>
-                <div onClick={this.onClickSelectResult}>結果を見る</div>
-                <div onClick={this.onClickSelectColors}>色を選ぶ</div>
-            </div>
-        )
-    }
+	componentDidMount() {
+		store.subscribe(() => {
+			setFontColor();
+		});
+
+		const setFontColor = () => {
+			const selectColors = store.getState().color.selectedColor;
+
+			const colors = { r: 0, g: 0, b: 0 };
+			for (let ii = 0; ii < selectColors.length; ii = ii + 1) {
+				colors.r += selectColors[ii].r / selectColors.length;
+				colors.g += selectColors[ii].g / selectColors.length;
+				colors.b += selectColors[ii].b / selectColors.length;
+			}
+
+			const gray = (colors.r + colors.b + colors.b) / 3;
+			if (gray > 122) {
+				this.setState({ color: '#000000' });
+			} else {
+				this.setState({ color: '#ffffff' });
+			}
+		};
+
+		setFontColor();
+	}
+
+	onClickSelectResult() {
+		store.dispatch(updatePage(Page.RESULT));
+	}
+
+	onClickSelectColors() {
+		store.dispatch(updatePage(Page.SURVEY));
+	}
+
+	render() {
+		return (
+			<div
+				style={{
+					transitionProperty: 'color',
+					transitionDuration: '0.6s',
+					position: 'absolute',
+					bottom: 40,
+					right: 40,
+					color: this.state.color
+				}}
+				className="wf-notosansjapanese"
+			>
+				<div>好きな色を選んでください。</div>
+			</div>
+		);
+	}
 }

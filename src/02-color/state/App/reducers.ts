@@ -14,8 +14,10 @@ export const app = (state: AppState = initialState, action: AppActions): AppStat
 	} else if (action.type === AppActionType.START_COLOR_LOAD) {
 		return { ...state, isColorLoading: true };
 	} else if (action.type === AppActionType.FETCH_COLOR_LOAD_SUCCESS) {
-        return { ...state, isColorLoading: false };
-	} else {
+		return { ...state, isColorLoading: false };
+	} else  if(action.type === AppActionType.UPDATE_PAGE){
+		return { ...state, page: action.page };
+	}else{
 		return state;
 	}
 };

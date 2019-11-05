@@ -3,39 +3,94 @@ import * as React from 'react';
 import { IColor } from './state/Color/types';
 import TweenMax, { Expo, Power4 } from 'gsap/TweenMax';
 import { store } from './state/index';
-import { selectColor } from './state/Color/actions';
+import { selectColor, removeColor } from './state/Color/actions';
+import { Firebase } from './firebase/firebase';
+import { Unsubscribe } from 'redux';
+import { Page } from './state/App/types';
 interface IProps {
 	color: IColor;
-	index: number;
 }
 
 interface IState {
 	opacity: number;
+	cursor: string;
+	top: number;
+	left: number;
 }
 
 export class ColorCard extends Component<IProps, IState> {
 	state = {
-		opacity: 0
-	};
-	private animation = {
-		opacity: 0
+		opacity: 0,
+		cursor: 'pointer',
+		top: 0,
+		left: 0
 	};
 	el = React.createRef<HTMLDivElement>();
+	unsubscribe: Unsubscribe;
+	constructor(props: IProps) {
+		super(props);
+
+		this.onClickHandler = this.onClickHandler.bind(this);
+		this.onResizeHandler = this.onResizeHandler.bind(this);
+	}
 
 	componentDidMount() {
-		this.onClickHandler = this.onClickHandler.bind(this);
-		TweenMax.from(this.el.current, 1.2, {
+		TweenMax.from(this.el.current, 1.0, {
 			opacity: 0,
-			y: '+40',
+			y: '+120',
 			ease: Power4.easeOut,
-			delay: 0.08 * this.props.index
+			delay: 0.08 * this.props.color.index
+		});
+
+		this.unsubscribe = store.subscribe(() => {
+			if (!store.getState().color.isSelctable) {
+				this.animateOut();
+			}
+
+			if (store.getState().app.page === Page.RESULT) {
+				this.animateOut();
+			}
+		});
+
+		this.onResizeHandler();
+		window.addEventListener('resize', this.onResizeHandler);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('resize', this.onResizeHandler);
+	}
+
+	onClickHandler() {
+		if (!store.getState().color.isSelctable) {
+			return;
+		}
+		store.dispatch(selectColor(this.props.color));
+		const firebase = Firebase.GET_INSTANCE();
+		firebase.updateColor(this.props.color);
+	}
+
+	onResizeHandler() {
+		const left = window.innerWidth / 2 - 60 - 150 * (-this.props.color.index + 2);
+		const top = window.innerHeight / 2 - 60;
+		this.setState({
+			top: top,
+			left: left
 		});
 	}
-	onClickHandler() {
-        console.log('onClick');
-		store.dispatch(selectColor(this.props.color))
-		
-    }
+
+	animateOut() {
+		this.unsubscribe();
+		TweenMax.killTweensOf(this.el.current);
+		TweenMax.to(this.el.current, 0.8, {
+			opacity: 0,
+			y: '-80',
+			ease: Power3.easeIn,
+			delay: 0.08 * this.props.color.index,
+			onComplete: () => {
+				store.dispatch(removeColor(this.props.color));
+			}
+		});
+	}
 	render() {
 		return (
 			<div
@@ -43,10 +98,11 @@ export class ColorCard extends Component<IProps, IState> {
 				style={{
 					width: 120,
 					height: 120,
-					margin: 10,
 					background: `rgb(${this.props.color.r}, ${this.props.color.g}, ${this.props.color.b})`,
-					cursor: 'pointer',
-					opacity: 1
+					cursor: this.state.cursor,
+					position: 'absolute',
+					top: this.state.top,
+					left: this.state.left
 				}}
 				onClick={this.onClickHandler}
 			></div>

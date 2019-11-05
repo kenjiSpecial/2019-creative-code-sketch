@@ -3,17 +3,10 @@ import 'firebase/database';
 // import { counterModule } from '../store/modules/couter';
 // import store from '../store/store';
 // import { firebaseConfig } from './config';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDSlTdL6ujGfA5sHGtPElv86ROFby-zf04",
-    authDomain: "creative-coding-sketches.firebaseapp.com",
-    databaseURL: "https://creative-coding-sketches.firebaseio.com",
-    projectId: "creative-coding-sketches",
-    storageBucket: "creative-coding-sketches.appspot.com",
-    messagingSenderId: "918212412691",
-    appId: "1:918212412691:web:7b8412eeb19d4f0f57c6e6",
-    measurementId: "G-EXWQF2GK7P"
-  };
+import { IColor } from '../state/Color/types';
+import { store } from '../state/index';
+import { selectColors } from '../state/Color/actions';
+import { firebaseConfig } from './config';
 
 export class Firebase {
 	private static instance: Firebase;
@@ -41,32 +34,37 @@ export class Firebase {
 		this.selectedColor = this.database.ref('colors/select');
 		this.notselectedColor = this.database.ref('colors/not_select');
 
-		this.colors.once('value', snapshot => {
-            const value = snapshot.val();
-			
-			for(let key in value){
-				console.log(key);
-			}
+		this.selectedColor.remove();
+
+		this.colors.on('value', snapshot => {
+			const value = snapshot.val();
 
 			if (value) {
+				const selectValue = value.select;
 
-            }
-            callback();
+				const colors = [];
+				for (let key in selectValue) {
+					colors.push({
+						r: selectValue[key].r,
+						g: selectValue[key].g,
+						b: selectValue[key].b
+					});
+				}
+
+				if (colors.length > 0) {
+					store.dispatch(selectColors(colors));
+				} else {
+					store.dispatch(selectColors([{ r: 255, g: 255, b: 255 }]));
+				}
+			} else {
+				store.dispatch(selectColors([{ r: 255, g: 255, b: 255 }]));
+			}
+			callback();
 		});
 	}
 
-	public updateCount(value: Number) {
-		// const updates = {
-		// 	'/colors': {'test': true}
-		// };
-
-		// // tslint:disable-next-line: no-floating-promises
-		// this.database.ref().update(updates);
-		// var newPostRef = this.counter.push();
-		// newPostRef.set({
-		// 	'test': 'hello'
-		// });
+	public updateColor(color: IColor) {
+		const newPostRef = this.selectedColor.push();
+		newPostRef.set(color);
 	}
-
-
 }
