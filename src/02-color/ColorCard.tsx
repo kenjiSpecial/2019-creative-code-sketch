@@ -35,7 +35,7 @@ export class ColorCard extends Component<IProps, IState> {
 	}
 
 	componentDidMount() {
-		TweenMax.from(this.el.current, 1.0, {
+		TweenMax.from(this.el.current, 0.9, {
 			opacity: 0,
 			y: '+120',
 			ease: Power4.easeOut,
@@ -81,7 +81,7 @@ export class ColorCard extends Component<IProps, IState> {
 	animateOut() {
 		this.unsubscribe();
 		TweenMax.killTweensOf(this.el.current);
-		TweenMax.to(this.el.current, 0.8, {
+		TweenMax.to(this.el.current, 0.6, {
 			opacity: 0,
 			y: '-80',
 			ease: Power3.easeIn,

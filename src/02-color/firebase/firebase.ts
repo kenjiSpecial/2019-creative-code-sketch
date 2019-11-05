@@ -6,7 +6,7 @@ import 'firebase/database';
 import { IColor } from '../state/Color/types';
 import { store } from '../state/index';
 import { selectColors } from '../state/Color/actions';
-import { firebaseConfig } from './config';
+import { firebaseConfig } from './_config';
 
 export class Firebase {
 	private static instance: Firebase;

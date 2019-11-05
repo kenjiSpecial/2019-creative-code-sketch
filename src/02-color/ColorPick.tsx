@@ -9,6 +9,7 @@ import { updateColor, updateSelect } from './state/Color/actions';
 import { ColorCard } from './ColorCard';
 import { AppState, Page } from './state/App/types';
 import { Unsubscribe } from 'redux';
+var ColorScheme = require('color-scheme');
 
 interface IState {
 	colors: IColor[];
@@ -67,55 +68,58 @@ export class ColorPick extends Component<{}, IState> {
 			const selectColors = store.getState().color.selectedColor;
 
 			const colors = { r: 0, g: 0, b: 0 };
-			for (let ii = 0; ii < selectColors.length; ii = ii + 1) {
-				colors.r += selectColors[ii].r / selectColors.length;
-				colors.g += selectColors[ii].g / selectColors.length;
-				colors.b += selectColors[ii].b / selectColors.length;
-			}
-			const colorR = [255 -Math.floor(colors.r), 255 -Math.floor(colors.g), 255 -Math.floor(colors.b)];
-			const colorA =
-				store.getState().color.focusColor.r !== 0 &&
-				store.getState().color.focusColor.g !== 0 &&
-				store.getState().color.focusColor.b !== 0
-					? [
-							255 - Math.floor(store.getState().color.focusColor.r),
-							255 - Math.floor(store.getState().color.focusColor.g),
-							255- Math.floor(store.getState().color.focusColor.b)
-					  ]
-					: colorR;
+			// for (let ii = 0; ii < selectColors.length; ii = ii + 1) {
+			// 	colors.r += selectColors[ii].r / selectColors.length;
+			// 	colors.g += selectColors[ii].g / selectColors.length;
+			// 	colors.b += selectColors[ii].b / selectColors.length;
+			// }
+			// const colorR = [255 -Math.floor(colors.r), 255 -Math.floor(colors.g), 255 -Math.floor(colors.b)];
+			// const colorA =
+			// 	store.getState().color.focusColor.r !== 0 &&
+			// 	store.getState().color.focusColor.g !== 0 &&
+			// 	store.getState().color.focusColor.b !== 0
+			// 		? [
+			// 				255 - Math.floor(store.getState().color.focusColor.r),
+			// 				255 - Math.floor(store.getState().color.focusColor.g),
+			// 				255- Math.floor(store.getState().color.focusColor.b)
+			// 		  ]
+			// 		: colorR;
 					  
-					console.log(colorR);
+			// 		console.log(colorR);
 
-			const data = {
-				model: 'default',
-				input: [colorA, 'N', 'N', 'N', 'N']
-			};
+			// const data = {
+			// 	model: 'default',
+			// 	input: [colorA, 'N', 'N', 'N', 'N']
+			// };
 
-			const http = new XMLHttpRequest();
+			// const http = new XMLHttpRequest();
 
-			const self = this;
-			http.onreadystatechange = function() {
-				if (http.readyState == 4 && http.status == 200) {
-					var palette = JSON.parse(http.responseText).result as number[][];
-					console.log(self.parseColor(palette));
+			// const self = this;
+			// http.onreadystatechange = function() {
+			// 	if (http.readyState == 4 && http.status == 200) {
+			// 		var palette = JSON.parse(http.responseText).result as number[][];
+			// 		console.log(self.parseColor(palette));
 					store.dispatch(fetchColorSuccesss());
-					store.dispatch(updateColor(self.parseColor(palette)));
-				}
-			};
+					store.dispatch(updateColor(this.parseColor()));
+			// 	}
+			// };
 
-			http.open('POST', url, true);
-			http.send(JSON.stringify(data));
+			// http.open('POST', url, true);
+			// http.send(JSON.stringify(data));
+
+			// var scheme = new ColorScheme;
+			// var colors = scheme.colors();
 		}, 800);
 	}
 
-	private parseColor(colors: number[][]) {
+	private parseColor() {
 		const colorArr = [];
 
-		for (let ii = 0; ii < colors.length; ii = ii + 1) {
+		for (let ii = 0; ii < 5; ii = ii + 1) {
 			colorArr.push({
-				r: colors[ii][0],
-				g: colors[ii][1],
-				b: colors[ii][2],
+				r: Math.floor(255 * Math.random()),
+				g: Math.floor(255 * Math.random()),
+				b: Math.floor(255 * Math.random()),
 				index: ii,
 				key: store.getState().color.group * 5 + ii,
 				group: store.getState().color.group,
