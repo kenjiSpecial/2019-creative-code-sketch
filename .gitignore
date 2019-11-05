@@ -31,6 +31,3 @@ doc
 
 .history/*
 
-*.map
-
-config.ts
