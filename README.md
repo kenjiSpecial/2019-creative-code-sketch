@@ -11,3 +11,7 @@
 [Demo](https://kenjispecial.github.io/2019-creative-code-sketch/sketches/02-color/)
 
 [Sourcecode Code](https://github.com/kenjiSpecial/2019-creative-code-sketch/tree/master/src/02-color)
+
+
+機械学習で使用する
+https://www.youtube.com/watch?time_continue=106&v=T2qQGqZxkD0
