@@ -111,7 +111,7 @@ export default class App {
 				const randY = randR * Math.sin(randTheta);
 
 				positions.push(x, y, z);
-				initPositions.push(initX + randX, initY + randY, z);
+				initPositions.push(0 + randX, 0 + randY, z);
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
@@ -142,7 +142,7 @@ export default class App {
 				const randX = randR * Math.cos(randTheta);
 				const randY = randR * Math.sin(randTheta);
 				positions.push(x, y, z);
-				initPositions.push(initX + randX, initY + randY, z);
+				initPositions.push(0 + randX, 0 + randY, z);
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
