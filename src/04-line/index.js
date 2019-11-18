@@ -42,6 +42,7 @@ export default class App {
 			1,
 			1000
 		);
+		
 		this.camera.position.z = 12;
 		this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 		this.targetPointZ = 0;
@@ -95,9 +96,6 @@ export default class App {
 			const rate = jj / (this.lineSize - 1);
 			const x = this.cameraAreaWidth * rate * 2 - this.cameraAreaWidth;
 			const initX =-this.cameraAreaWidth + 2 * this.cameraAreaWidth * Math.random();
-				// jj < this.lineSize / 2
-				// 	? this.cameraAreaWidth * (Math.random() * 1.2 + 0.4)
-				// 	: -this.cameraAreaWidth * (Math.random() * 1.2 + 0.4);
 			const initY = -this.cameraAreaHeight + 2 * this.cameraAreaHeight * Math.random();
 
 			const cnt = jj * this.lineSegments;
@@ -111,7 +109,7 @@ export default class App {
 				const randY = randR * Math.sin(randTheta);
 
 				positions.push(x, y, z);
-				initPositions.push(0 + randX, 0 + randY, z);
+				initPositions.push(0 + randX, 0 + randY, z - 100- 100 * Math.random());
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
@@ -127,9 +125,6 @@ export default class App {
 			const y = this.cameraAreaHeight * rate * 2 - this.cameraAreaHeight;
 			const initX = -this.cameraAreaWidth + 2 * this.cameraAreaWidth * Math.random();
 			const initY = -this.cameraAreaHeight + 2 * this.cameraAreaHeight * Math.random();;
-				// jj < this.lineSize / 2
-					// ? this.cameraAreaHeight * (Math.random() * 1.2 + 0.4)
-					// : -this.cameraAreaHeight * (Math.random() * 1.2 + 0.4);
 
 			const cnt = jj * this.lineSegments + lastIndex;
 
@@ -142,7 +137,7 @@ export default class App {
 				const randX = randR * Math.cos(randTheta);
 				const randY = randR * Math.sin(randTheta);
 				positions.push(x, y, z);
-				initPositions.push(0 + randX, 0 + randY, z);
+				initPositions.push(0 + randX, 0 + randY, z- 100 - 100 * Math.random());
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
