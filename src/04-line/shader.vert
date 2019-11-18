@@ -13,8 +13,18 @@ uniform float uTime;
 
 varying float vRate;
 
+float exponentialInOut(float t) {
+  return t == 0.0 || t == 1.0
+    ? t
+    : t < 0.5
+      ? +0.5 * pow(2.0, (20.0 * t) - 10.0)
+      : -0.5 * pow(2.0, 10.0 - (t * 20.0)) + 1.0;
+}
+
 void main(){
-    float rate =  (cos(uTime * 0.6 + PI) + 1.)/2.;
+    float timeScale = 1.5;
+    float rate =  clamp( fract(uTime/ 10. * timeScale) * 1.5, 0.0, 1.0);
+    rate = exponentialInOut(rate);
     vec3 curPosition = mix(initPosition, position, rate);
     gl_Position = projectionMatrix * modelViewMatrix * vec4( curPosition, 1.0);
 
@@ -28,5 +38,5 @@ void main(){
     
     gl_Position = projectionMatrix * modelViewMatrix * vec4( curPosition.x , curPosition.y,  dz, 1.0);
 
-    vRate =rate;
+    vRate =(cos(timeScale * uTime * PI / 10. * 2. + PI) + 1.)/2.;
 }

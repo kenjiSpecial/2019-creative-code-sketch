@@ -82,7 +82,7 @@ export default class App {
 	makeMesh() {
 		this.bufferGeometry = new THREE.BufferGeometry();
 
-		this.lineSegments = 40;
+		this.lineSegments = 200;
 		this.lineSize = 201;
 
 		var positions = [];
@@ -94,19 +94,24 @@ export default class App {
 		for (let jj = 0; jj < this.lineSize; jj = jj + 1) {
 			const rate = jj / (this.lineSize - 1);
 			const x = this.cameraAreaWidth * rate * 2 - this.cameraAreaWidth;
-			const initX =
-				jj < this.lineSize / 2
-					? this.cameraAreaWidth * (Math.random() * 0.2+ 0.9)
-					: -this.cameraAreaWidth * (Math.random() + 0.9);
+			const initX =-this.cameraAreaWidth + 2 * this.cameraAreaWidth * Math.random();
+				// jj < this.lineSize / 2
+				// 	? this.cameraAreaWidth * (Math.random() * 1.2 + 0.4)
+				// 	: -this.cameraAreaWidth * (Math.random() * 1.2 + 0.4);
+			const initY = -this.cameraAreaHeight + 2 * this.cameraAreaHeight * Math.random();
 
 			const cnt = jj * this.lineSegments;
 
 			for (let ii = 0; ii < this.lineSegments; ii = ii + 1) {
 				const yRate = ii / (this.lineSegments - 1);
-
 				const y = this.cameraAreaHeight * (yRate * 2 - 1);
+				const randTheta = Math.random() * Math.PI * 2;
+				const randR = Math.random();
+				const randX = randR * Math.cos(randTheta);
+				const randY = randR * Math.sin(randTheta);
+
 				positions.push(x, y, z);
-				initPositions.push(initX, y, z);
+				initPositions.push(initX + randX, initY + randY, z);
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
@@ -116,14 +121,15 @@ export default class App {
 		}
 
 		lastIndex = lastIndex + 1;
-
+ 
 		for (let jj = 0; jj < this.lineSize; jj = jj + 1) {
 			const rate = jj / (this.lineSize - 1);
 			const y = this.cameraAreaHeight * rate * 2 - this.cameraAreaHeight;
-			const initY =
-				jj < this.lineSize / 2
-					? this.cameraAreaHeight * (Math.random() * 0.2 + 0.9)
-					: -this.cameraAreaHeight * (Math.random() * 0.2 + 0.9);
+			const initX = -this.cameraAreaWidth + 2 * this.cameraAreaWidth * Math.random();
+			const initY = -this.cameraAreaHeight + 2 * this.cameraAreaHeight * Math.random();;
+				// jj < this.lineSize / 2
+					// ? this.cameraAreaHeight * (Math.random() * 1.2 + 0.4)
+					// : -this.cameraAreaHeight * (Math.random() * 1.2 + 0.4);
 
 			const cnt = jj * this.lineSegments + lastIndex;
 
@@ -131,8 +137,12 @@ export default class App {
 				const xRate = ii / (this.lineSegments - 1);
 
 				const x = this.cameraAreaWidth * (xRate * 2 - 1);
+				const randTheta = Math.random() * Math.PI * 2;
+				const randR = Math.random();
+				const randX = randR * Math.cos(randTheta);
+				const randY = randR * Math.sin(randTheta);
 				positions.push(x, y, z);
-				initPositions.push(x, initY, z);
+				initPositions.push(initX + randX, initY + randY, z);
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
