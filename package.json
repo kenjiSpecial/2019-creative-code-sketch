@@ -8,9 +8,9 @@
     "01": "parcel src/01-typography/index.html --no-hmr --port 1234  --out-dir sketches/01-typography",
     "02": "parcel src/02-color/index.html --no-hmr --port 1234  --out-dir sketches/02-color",
     "04": "parcel src/04-line/index.html --no-hmr --port 1234  --out-dir sketches/04-line",
-    "d01": "rm -rf sketches/01-typography/*.js && parcel build src/01-typography/index.html --out-dir sketches/01-typography --public-url ./  --no-source-maps",
+    "d01": "rm -rf sketches/01-typography/*.js && rm -rf sketches/01-typography/*.js.map && parcel build src/01-typography/index.html --out-dir sketches/01-typography --public-url ./  --no-source-maps",
     "d02": "rm -rf sketches/02-color/*.js && rm -rf sketches/02-color/*.js.map && parcel build src/02-color/index.html --out-dir sketches/02-color --public-url ./  --no-source-maps",
-    "d04": "rm -rf sketches/04-line/*.js && rm -rf sketches/04-line/*.js.map && parcel build src/04-line/index.html --out-dir sketches/02-color --public-url ./  --no-source-maps",
+    "d04": "rm -rf sketches/04-line/*.js && rm -rf sketches/04-line/*.js.map && parcel build src/04-line/index.html --out-dir sketches/04-line --public-url ./  --no-source-maps",
     "dist": "python -m SimpleHTTPServer 8200"
   },
   "dependencies": {
