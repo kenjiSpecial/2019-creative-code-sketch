@@ -10,8 +10,8 @@ import TweenMax, { Expo, Power4 } from 'gsap/TweenMax';
 export default class App {
 	constructor(params) {
 		this.params = params || {};
-		this.target = {x: 0, y: 0};
-		this.mouse = {x: 0, y: 0};
+		this.target = { x: 0, y: 0 };
+		this.mouse = { x: 0, y: 0 };
 
 		this.makeRenderer();
 		this.makeScene();
@@ -93,8 +93,11 @@ export default class App {
 		var lastIndex = 0;
 		for (let jj = 0; jj < this.lineSize; jj = jj + 1) {
 			const rate = jj / (this.lineSize - 1);
-			const x = (this.cameraAreaWidth * rate * 2 - this.cameraAreaWidth) ;
-			const initX = - this.cameraAreaWidth;
+			const x = this.cameraAreaWidth * rate * 2 - this.cameraAreaWidth;
+			const initX =
+				jj < this.lineSize / 2
+					? this.cameraAreaWidth * (Math.random() * 0.2+ 0.9)
+					: -this.cameraAreaWidth * (Math.random() + 0.9);
 
 			const cnt = jj * this.lineSegments;
 
@@ -103,11 +106,11 @@ export default class App {
 
 				const y = this.cameraAreaHeight * (yRate * 2 - 1);
 				positions.push(x, y, z);
-				initPositions.push(initX, y, z)
+				initPositions.push(initX, y, z);
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
-					lastIndex = cnt + ii + 1
+					lastIndex = cnt + ii + 1;
 				}
 			}
 		}
@@ -116,8 +119,11 @@ export default class App {
 
 		for (let jj = 0; jj < this.lineSize; jj = jj + 1) {
 			const rate = jj / (this.lineSize - 1);
-			const y = (this.cameraAreaHeight * rate * 2 - this.cameraAreaHeight) ;
-			const initY = this.cameraAreaHeight;
+			const y = this.cameraAreaHeight * rate * 2 - this.cameraAreaHeight;
+			const initY =
+				jj < this.lineSize / 2
+					? this.cameraAreaHeight * (Math.random() * 0.2 + 0.9)
+					: -this.cameraAreaHeight * (Math.random() * 0.2 + 0.9);
 
 			const cnt = jj * this.lineSegments + lastIndex;
 
@@ -126,15 +132,13 @@ export default class App {
 
 				const x = this.cameraAreaWidth * (xRate * 2 - 1);
 				positions.push(x, y, z);
-				initPositions.push(x, initY, z)
+				initPositions.push(x, initY, z);
 
 				if (ii < this.lineSegments - 1) {
 					indices.push(cnt + ii, cnt + ii + 1);
 				}
 			}
 		}
-
-
 
 		this.bufferGeometry.setAttribute(
 			'position',
@@ -150,38 +154,38 @@ export default class App {
 			vertexShader: vertexShaderSrc,
 			fragmentShader: fragmentShaderSrc,
 			uniforms: {
-				uTexture: {value: null},
-				uScale: {value: window.innerWidth/window.innerHeight},
-				uMouse: {value: new THREE.Vector2(0, 0)},
-				uTime: {value: 0}
+				uTexture: { value: null },
+				uScale: { value: window.innerWidth / window.innerHeight },
+				uMouse: { value: new THREE.Vector2(0, 0) },
+				uTime: { value: 0 }
 			}
-		})
+		});
 		this.mesh = new THREE.LineSegments(this.bufferGeometry, this.material);
 
 		this.scene.add(this.mesh);
 	}
 
-	loadTexture	() {
+	loadTexture() {
 		var loader = new THREE.TextureLoader();
 		var self = this;
 		loader.load(
 			// resource URL
 			'face.jpg',
-		
+
 			// onLoad callback
-			function ( texture ) {
+			function(texture) {
 				// in this example we create the material when the texture is loaded
 
-				self.material.uniforms.uTexture.value = texture
+				self.material.uniforms.uTexture.value = texture;
 				self.animateIn();
 			},
-		
+
 			// onProgress callback currently not supported
 			undefined,
-		
+
 			// onError callback
-			function ( err ) {
-				console.error( 'An error happened.' );
+			function(err) {
+				console.error('An error happened.');
 			}
 		);
 	}
@@ -193,11 +197,11 @@ export default class App {
 
 	loop() {
 		this.mouse.x += (this.target.x - this.mouse.x) * 0.05;
-		this.mouse.y += (this.target.y - this.mouse.y) * 0.05;	
+		this.mouse.y += (this.target.y - this.mouse.y) * 0.05;
 
 		this.material.uniforms.uMouse.value.x = this.mouse.x;
 		this.material.uniforms.uMouse.value.y = this.mouse.y;
-		this.material.uniforms.uTime.value = this.material.uniforms.uTime.value + 1/60;
+		this.material.uniforms.uTime.value = this.material.uniforms.uTime.value + 1 / 60;
 
 		this.renderer.render(this.scene, this.camera);
 		if (this.stats) this.stats.update();
