@@ -16,7 +16,6 @@ export default class App {
 		this.makeScene();
 		this.makeCamera();
 		this.makeMesh();
-
 		this.makeUtils();
 		this.resize();
 	}
