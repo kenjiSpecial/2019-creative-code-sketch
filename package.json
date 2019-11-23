@@ -8,16 +8,23 @@
     "01": "parcel src/01-typography/index.html --no-hmr --port 1234  --out-dir sketches/01-typography",
     "02": "parcel src/02-color/index.html --no-hmr --port 1234  --out-dir sketches/02-color",
     "04": "parcel src/04-line/index.html --no-hmr --port 1234  --out-dir sketches/04-line",
+    "0501": "parcel src/05-camera/01-number/index.html --no-hmr --port 1234  --out-dir sketches/05-camera/01-number",
+    "0502": "parcel src/05-camera/02-number-facedetect/index.html --no-hmr --port 1234  --out-dir sketches/05-camera/02-number-facedetect",
     "d01": "rm -rf sketches/01-typography/*.js && rm -rf sketches/01-typography/*.js.map && parcel build src/01-typography/index.html --out-dir sketches/01-typography --public-url ./  --no-source-maps",
     "d02": "rm -rf sketches/02-color/*.js && rm -rf sketches/02-color/*.js.map && parcel build src/02-color/index.html --out-dir sketches/02-color --public-url ./  --no-source-maps",
     "d04": "rm -rf sketches/04-line/*.js && rm -rf sketches/04-line/*.js.map && parcel build src/04-line/index.html --out-dir sketches/04-line --public-url ./  --no-source-maps",
+    "d0501": "rm -rf sketches/05-camera/01-number/*.js && rm -rf sketches/05-camera/01-number/*.js.map && parcel build src/05-camera/01-number/index.html --out-dir sketches/05-camera/01-number --public-url ./  --no-source-maps",
+    "d0502": "rm -rf sketches/05-camera/02-number-facedetect/*.js && rm -rf sketches/05-camera/02-number-facedetect/*.js.map && parcel build src/05-camera/02-number-facedetect/index.html --out-dir sketches/05-camera/02-number-facedetect --public-url ./  --no-source-maps",
     "dist": "python -m SimpleHTTPServer 8200"
   },
   "dependencies": {
+    "@tensorflow-models/coco-ssd": "^2.0.0",
+    "@tensorflow/tfjs-converter": "^1.3.2",
     "@types/axios": "^0.14.0",
     "axios": "^0.19.0",
     "color-scheme": "^1.0.1",
     "dat.gui": "^0.7.6",
+    "face-api.js": "^0.21.0",
     "firebase": "^7.2.2",
     "gsap": "^2.1.3",
     "react": "^16.11.0",
@@ -36,9 +43,13 @@
     "@types/react-dom": "^16.9.3",
     "@types/react-redux": "^7.1.5",
     "@types/redux-logger": "^3.0.7",
+    "babel-core": "~6.26.3",
+    "babel-plugin-transform-runtime": "~6.23.0",
+    "babel-polyfill": "~6.26.0",
+    "babel-preset-env": "~1.6.1",
     "glslify-bundle": "^5.1.1",
     "glslify-deps": "^1.3.1",
-    "parcel-bundler": "^1.11.0",
+    "parcel-bundler": "^1.12.4",
     "typescript": "^3.6.4"
   }
 }
