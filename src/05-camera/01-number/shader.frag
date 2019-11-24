@@ -2,8 +2,9 @@ precision highp float;
 
 uniform sampler2D uTexture;
 uniform sampler2D uFontTexture; 
-uniform float uGridSize;
 uniform vec2 uWindowSize;
+uniform float uGridSize;
+uniform float uProgress;
 
 varying vec2 vUv;
 
@@ -17,9 +18,9 @@ void main(){
     gridUv.x = 1.0 - gridUv.x;
     float blackWhite = (textureColor.r + textureColor.g + textureColor.b )/3.;
 
-    float rate = floor(blackWhite * 9.);
+    float rate = floor(mix(6., blackWhite * 9., uProgress));
     float col = mod(rate, 3.);
-    float row = floor(rate/ 3.);
+    float row = floor(rate / 3.);
 
     vec2 outputUv = vec2(gridUv.x / 3. + 0.333 * col, gridUv.y/3. + 0.333  * row);
 
