@@ -13,6 +13,7 @@ export default class App {
 		this.target = { x: 0, y: 0 };
 		this.mouse = { x: 0, y: 0 };
 		this.gridSize = 10;
+		
 
 		this.makeRenderer();
 		this.makeScene();
@@ -91,6 +92,7 @@ export default class App {
 				uFontTexture: { value: this.fontTexture },
 				uGridSize: {value: 5},
 				uProgress: {value: 1},
+				uProcess: {value: 1},
 				uWindowSize: { value: new THREE.Vector2(this.videoWidth, this.videoHeight) }
 			}
 		});
@@ -99,7 +101,8 @@ export default class App {
 
 		if(this.gui){
 			this.gui.add(shaderMaterial.uniforms.uGridSize, 'value', 5, 50).step(1).name('gridSize')
-			this.gui.add(shaderMaterial.uniforms.uProgress, 'value', 0, 1).step(0.01).name('uProgress')
+			this.gui.add(shaderMaterial.uniforms.uProgress, 'value', 0, 1).step(0.01).name('progress')
+			this.gui.add(shaderMaterial.uniforms.uProcess, 'value', 0, 1).step(1).name('process')
 		}
 
 		this.scene.add(this.mesh);
