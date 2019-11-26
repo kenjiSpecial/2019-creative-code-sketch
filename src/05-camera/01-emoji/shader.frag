@@ -25,11 +25,11 @@ void main(){
         float row = floor(rate / 3.);
 
         vec2 outputUv = vec2(gridUv.x / 3. + 0.333 * col, gridUv.y/3. + 0.333  * row);
-
-        vec4 outColor = texture2D(uFontTexture, outputUv);//vec4(gridUv, 0.0, 1.0);
+        vec4 outColor = texture2D(uFontTexture, outputUv);
 
         gl_FragColor = outColor;
     }else{
+        blackWhite = floor(blackWhite * 9.)/9.;
         gl_FragColor = vec4(blackWhite, blackWhite, blackWhite, 1.0);
     }
     

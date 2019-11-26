@@ -145,6 +145,8 @@ export default class App {
 		var getVideoSize = function() {
 			self.videoWidth = video.videoWidth;
 			self.videoHeight = video.videoHeight;
+			// self.videoWidth = 350;
+			// self.videoHeight = 250;
 			self.resizeVideo();
 			video.removeEventListener('playing', getVideoSize, false);
 		};
@@ -171,6 +173,11 @@ export default class App {
 		// })
 
 		// self.texture = texture;
+
+		// this.takaTexture = new THREE.TextureLoader().load('taka.png');
+		// this.takaTexture.minFilter = THREE.LinearFilter;
+		// this.takaTexture.magFilter = THREE.LinearFilter;
+		// this.takaTexture.format = THREE.RGBAFormat;
 
 		this.fontTexture = new THREE.TextureLoader().load('number_font.png');
 		this.fontTexture.minFilter = THREE.LinearFilter;
