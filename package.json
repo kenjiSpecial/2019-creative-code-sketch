@@ -11,6 +11,8 @@
     "05": "parcel src/05-camera/01-emoji/index.html --no-hmr --port 1234  --out-dir sketches/05-camera",
     "0502": "parcel src/05-camera/02-number-facedetect/index.html --no-hmr --port 1234  --out-dir sketches/05-camera/02-number-facedetect",
     "06": "parcel src/06-logo/index.html --no-hmr --port 1234  --out-dir sketches/06-logo",
+    "07": "parcel src/07-camera/index.html --no-hmr --port 1234  --out-dir sketches/07-camera",
+    "d07": "rm -rf sketches/07-camera/*.js sketches/07-camera/*.js.map && parcel build src/07-camera/index.html --out-dir sketches/07-camera --public-url ./  --no-source-maps",
     "d01": "rm -rf sketches/01-typography/*.js && rm -rf sketches/01-typography/*.js.map && parcel build src/01-typography/index.html --out-dir sketches/01-typography --public-url ./  --no-source-maps",
     "d02": "rm -rf sketches/02-color/*.js && rm -rf sketches/02-color/*.js.map && parcel build src/02-color/index.html --out-dir sketches/02-color --public-url ./  --no-source-maps",
     "d04": "rm -rf sketches/04-line/*.js && rm -rf sketches/04-line/*.js.map && parcel build src/04-line/index.html --out-dir sketches/04-line --public-url ./  --no-source-maps",
@@ -36,8 +38,9 @@
     "redux-logger": "^3.0.6",
     "stats": "^1.0.0",
     "stats.js": "^0.17.0",
-    "three": "^0.109.0",
-    "three-orbit-controls": "^82.1.0"
+    "three": ">= 0.110.0",
+    "three-orbit-controls": "^82.1.0",
+    "three-orbitcontrols": "^2.110.1"
   },
   "devDependencies": {
     "@types/react": "^16.9.11",
@@ -46,6 +49,7 @@
     "@types/redux-logger": "^3.0.7",
     "babel-core": "~6.26.3",
     "babel-plugin-transform-runtime": "~6.23.0",
+
     "babel-polyfill": "~6.26.0",
     "babel-preset-env": "~1.6.1",
     "glslify-bundle": "^5.1.1",
