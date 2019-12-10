@@ -13,7 +13,8 @@ function init() {
 	var width = window.innerWidth;
 	var height = window.innerHeight;
 	var debug = {
-		shoot: shoot
+		shoot: shoot,
+		isDebug: false
 	};
 	var shootValue = {
 		flush: 0,
@@ -30,17 +31,18 @@ function init() {
 
 		shootValue.flush = 1;
 		shootValue.state = 1;
-		TweenMax.to(shootValue, 0.4, {flush: 0});
+		TweenMax.to(shootValue, 0.4, { flush: 0 });
 		TweenMax.delayedCall(1, transition);
 	}
 
-	function transition(){
-		TweenMax.to(shootValue, 0.8, {state: 0});
+	function transition() {
+		TweenMax.to(shootValue, 0.8, { state: 0 });
 	}
 	//---------------------
 
 	var gui = new dat.GUI();
 	gui.add(debug, 'shoot').name('撮影する');
+	gui.add(debug, 'isDebug').name('debug');
 
 	// シーン---------------
 	var scene = new THREE.Scene();
@@ -133,13 +135,14 @@ function init() {
 	function render() {
 		phoneMat.uniforms.uState.value = shootValue.state;
 		phoneMat.uniforms.uFlush.value = shootValue.flush;
-		
+
 		lat = Math.max(-85, Math.min(85, lat));
 		phi = THREE.Math.degToRad(90 - lat);
 		theta = THREE.Math.degToRad(lon);
 		camera.position.x = distance * Math.sin(phi) * Math.cos(theta);
 		camera.position.y = distance * Math.cos(phi);
 		camera.position.z = distance * Math.sin(phi) * Math.sin(theta);
+		// console.log(camera.position);
 		camera.lookAt(new THREE.Vector3());
 		// マウスでカメラを操作するため
 		renderer.setRenderTarget(renderTarget);
@@ -150,7 +153,15 @@ function init() {
 
 		renderer.setRenderTarget(null);
 		camera.add(mesh);
-		renderer.render(scene, camera);
+
+		if (debug.isDebug) {
+			scene.add(debugObject);
+			debugCamera.lookAt(camera.position)
+			renderer.render(scene, debugCamera);
+		} else {
+			scene.remove(debugObject);
+			renderer.render(scene, camera);
+		}
 
 		requestAnimationFrame(render);
 		//シーンとカメラをいれる。
@@ -181,20 +192,19 @@ function init() {
 	var renderTargetHig = (renderTargetWid * 3.32) / 1.89;
 	var renderTarget = new THREE.WebGLRenderTarget(renderTargetWid, renderTargetHig);
 	// var phoneMat = new THREE.MeshBasicMaterial({ map: renderTarget.texture });
-	
 
 	var pictureRenderTarget = new THREE.WebGLRenderTarget(renderTargetWid, renderTargetHig);
 	var pictureMat = new THREE.MeshBasicMaterial({ map: pictureRenderTarget.texture });
 	var phoneMat = new THREE.RawShaderMaterial({
 		uniforms: {
-			uState: {value: shootValue.state},
-			uFlush: {value: shootValue.flush},
-			uBaseTex: {value: renderTarget.texture},
-			uPicTex: {value: pictureRenderTarget.texture},
+			uState: { value: shootValue.state },
+			uFlush: { value: shootValue.flush },
+			uBaseTex: { value: renderTarget.texture },
+			uPicTex: { value: pictureRenderTarget.texture }
 		},
 		vertexShader: vertexShaderSrc,
-		fragmentShader: fragmentShaderSrc,
-	})
+		fragmentShader: fragmentShaderSrc
+	});
 
 	loader.load('./mobile.obj', function(object) {
 		mesh = object;
@@ -203,8 +213,8 @@ function init() {
 		mesh.position.y = 0.5;
 		camera.add(object);
 		object.add(phoneCamera);
-		phoneCamera.position.z = -10;
-		phoneCamera.position.y = 10;
+		phoneCamera.position.z = -0.5;
+		phoneCamera.position.y = 1.5;
 
 		for (let ii = 0; ii < mesh.children.length; ii++) {
 			var kidMesh = mesh.children[ii];
@@ -221,8 +231,24 @@ function init() {
 			render();
 		}
 
-		// var fontTexture = new THREE.TextureLoader().load('number_font.png');
 	});
+
+	// debug
+	const debugCamera = new THREE.PerspectiveCamera(
+		45,
+		window.innerWidth / window.innerHeight,
+		1,
+		10000
+	);
+	debugCamera.position.set(100, 30, 0);
+	// debugCamera.lookAt(new THREE.Vector3());
+	const orbit = new OrbitControls(debugCamera);
+	
+	const debugObject = new THREE.Object3D();
+	var helper0 = new THREE.CameraHelper( camera );
+	debugObject.add( helper0 );
+	var helper1 = new THREE.CameraHelper( phoneCamera );
+	debugObject.add( helper1 );
 
 	//---------------------
 }
