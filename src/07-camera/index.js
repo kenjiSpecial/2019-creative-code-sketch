@@ -13,7 +13,8 @@ function init() {
 	var width = window.innerWidth;
 	var height = window.innerHeight;
 	var debug = {
-		shoot: shoot
+		shoot: shoot,
+		isDebug: false
 	};
 	var shootValue = {
 		flush: 0,
@@ -41,6 +42,7 @@ function init() {
 
 	var gui = new dat.GUI();
 	gui.add(debug, 'shoot').name('撮影する');
+	gui.add(debug, 'isDebug').name('debug');
 
 	// シーン---------------
 	var scene = new THREE.Scene();
@@ -140,6 +142,7 @@ function init() {
 		camera.position.x = distance * Math.sin(phi) * Math.cos(theta);
 		camera.position.y = distance * Math.cos(phi);
 		camera.position.z = distance * Math.sin(phi) * Math.sin(theta);
+		// console.log(camera.position);
 		camera.lookAt(new THREE.Vector3());
 		// マウスでカメラを操作するため
 		renderer.setRenderTarget(renderTarget);
@@ -150,7 +153,15 @@ function init() {
 
 		renderer.setRenderTarget(null);
 		camera.add(mesh);
-		renderer.render(scene, camera);
+
+		if (debug.isDebug) {
+			scene.add(debugObject);
+			debugCamera.lookAt(camera.position)
+			renderer.render(scene, debugCamera);
+		} else {
+			scene.remove(debugObject);
+			renderer.render(scene, camera);
+		}
 
 		requestAnimationFrame(render);
 		//シーンとカメラをいれる。
@@ -203,8 +214,8 @@ function init() {
 		// mesh.rotation.x = 0;
 		camera.add(object);
 		object.add(phoneCamera);
-		phoneCamera.position.z = -10;
-		phoneCamera.position.y = 10;
+		phoneCamera.position.z = -0.5;
+		phoneCamera.position.y = 1.5;
 
 		for (let ii = 0; ii < mesh.children.length; ii++) {
 			var kidMesh = mesh.children[ii];
@@ -221,8 +232,24 @@ function init() {
 			render();
 		}
 
-		// var fontTexture = new THREE.TextureLoader().load('number_font.png');
 	});
+
+	// debug
+	const debugCamera = new THREE.PerspectiveCamera(
+		45,
+		window.innerWidth / window.innerHeight,
+		1,
+		10000
+	);
+	debugCamera.position.set(100, 30, 0);
+	// debugCamera.lookAt(new THREE.Vector3());
+	const orbit = new OrbitControls(debugCamera);
+	
+	const debugObject = new THREE.Object3D();
+	var helper0 = new THREE.CameraHelper( camera );
+	debugObject.add( helper0 );
+	var helper1 = new THREE.CameraHelper( phoneCamera );
+	debugObject.add( helper1 );
 
 	//---------------------
 }
