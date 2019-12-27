@@ -30,12 +30,12 @@ function init() {
 
 		shootValue.flush = 1;
 		shootValue.state = 1;
-		TweenMax.to(shootValue, 0.4, {flush: 0});
+		TweenMax.to(shootValue, 0.4, { flush: 0 });
 		TweenMax.delayedCall(1, transition);
 	}
 
-	function transition(){
-		TweenMax.to(shootValue, 0.8, {state: 0});
+	function transition() {
+		TweenMax.to(shootValue, 0.8, { state: 0 });
 	}
 	//---------------------
 
@@ -133,7 +133,7 @@ function init() {
 	function render() {
 		phoneMat.uniforms.uState.value = shootValue.state;
 		phoneMat.uniforms.uFlush.value = shootValue.flush;
-		
+
 		lat = Math.max(-85, Math.min(85, lat));
 		phi = THREE.Math.degToRad(90 - lat);
 		theta = THREE.Math.degToRad(lon);
@@ -181,26 +181,26 @@ function init() {
 	var renderTargetHig = (renderTargetWid * 3.32) / 1.89;
 	var renderTarget = new THREE.WebGLRenderTarget(renderTargetWid, renderTargetHig);
 	// var phoneMat = new THREE.MeshBasicMaterial({ map: renderTarget.texture });
-	
 
 	var pictureRenderTarget = new THREE.WebGLRenderTarget(renderTargetWid, renderTargetHig);
 	var pictureMat = new THREE.MeshBasicMaterial({ map: pictureRenderTarget.texture });
 	var phoneMat = new THREE.RawShaderMaterial({
 		uniforms: {
-			uState: {value: shootValue.state},
-			uFlush: {value: shootValue.flush},
-			uBaseTex: {value: renderTarget.texture},
-			uPicTex: {value: pictureRenderTarget.texture},
+			uState: { value: shootValue.state },
+			uFlush: { value: shootValue.flush },
+			uBaseTex: { value: renderTarget.texture },
+			uPicTex: { value: pictureRenderTarget.texture }
 		},
 		vertexShader: vertexShaderSrc,
-		fragmentShader: fragmentShaderSrc,
-	})
+		fragmentShader: fragmentShaderSrc
+	});
 
 	loader.load('./mobile.obj', function(object) {
 		mesh = object;
 		// mesh.rotation.z = Math.PI / 2;
 		mesh.position.z = -3;
 		mesh.position.y = 0.5;
+		// mesh.rotation.x = 0;
 		camera.add(object);
 		object.add(phoneCamera);
 		phoneCamera.position.z = -10;
