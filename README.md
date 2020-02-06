@@ -20,6 +20,9 @@ https://www.youtube.com/watch?time_continue=106&v=T2qQGqZxkD0
 ### #05 video & Image
 [Demo](https://kenjispecial.github.io/2019-creative-code-sketch/sketches/05-camera/)
 
+### #05 Camera & Tensorflow
+[Demo](https://kenjispecial.github.io/2019-creative-code-sketch/sketches/05-camera/05-emoji-tensorflow)
+
 
 ### #06 Logo
 
