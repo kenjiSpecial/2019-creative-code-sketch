@@ -3,7 +3,7 @@ precision highp float;
 uniform sampler2D uTexture;
 uniform sampler2D uFontTexture; 
 uniform sampler2D uMask; 
-
+uniform float uTime;
 uniform vec2 uWindowSize;
 uniform float uGridMinSize;
 uniform float uGridMaxSize;
@@ -20,7 +20,11 @@ void main(){
     vec2 gridIndex = floor(windowSize/gridSize);
     vec2 customUv = (gridIndex * gridSize)/uWindowSize;
     vec4 textureColor = texture2D(uTexture, customUv);
-    float blackWhite = (textureColor.r + textureColor.g + textureColor.b )/3. * mix(0., 1.0, maskVal);
+    // float dist = distance(vUv* windowSize, vec2(0.5) *  windowSize );
+    float blackWhite = mix( 
+        cos(uTime * 0.5) * 0.49 + 0.5, 
+        (textureColor.r + textureColor.g + textureColor.b )/3.0, 
+        maskVal);
 
     if(uProcess == 1.0){
         vec2 gridUv = (windowSize - gridIndex * gridSize) / gridSize;

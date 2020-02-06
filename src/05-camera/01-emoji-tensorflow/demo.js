@@ -37,10 +37,11 @@ const shaderMaterial = new THREE.RawShaderMaterial({
 	fragmentShader: fragmentShaderSrc,
 	uniforms: {
 		uTexture: { value: null },
-		uMask: {value: null},
+		uMask: { value: null },
 		uFontTexture: { value: fontTexture },
-		uGridMinSize: { value: 6 },
-		uGridMaxSize: { value: 30 },
+		uGridMinSize: { value: 3 },
+		uGridMaxSize: { value: 15 },
+		uTime: { value: 0 },
 		uProgress: { value: 1 },
 		uProcess: { value: 1 },
 		uWindowSize: { value: new THREE.Vector2(videoWidth, videoHeight) }
@@ -50,6 +51,7 @@ var mesh = new THREE.Mesh(plane, shaderMaterial);
 scene.add(mesh);
 
 resize();
+window.addEventListener('resize', resize);
 
 async function loadBodyPix() {
 	net = await bodyPix.load();
@@ -104,7 +106,7 @@ async function main() {
 	canvas = document.createElement('canvas');
 	canvas.width = 640;
 	canvas.height = 360;
-	document.body.appendChild(canvas);
+	// document.body.appendChild(canvas);
 
 	const ctx = canvas.getContext('2d');
 	maskTexture = new THREE.Texture(canvas);
@@ -135,7 +137,7 @@ async function loop() {
 	const ctx = canvas.getContext('2d');
 	var canvasWid = canvas.width;
 	var canvasHig = canvas.height;
-	
+
 	var imgData = ctx.getImageData(0, 0, canvasWid, canvasHig);
 
 	for (var yy = 0; yy < canvasHig; yy = yy + 1) {
@@ -145,17 +147,18 @@ async function loop() {
 			var targetVal;
 			if (multiPersonSegmentation.data[index] > 0) {
 				targetVal = 255;
-			}else{
+			} else {
 				targetVal = 0;
 			}
-			if(Math.abs(targetVal - value) > 10){
+			if (Math.abs(targetVal - value) > 10) {
 				value = Math.floor(value + (targetVal - value) * 0.1);
-			}else{
-				if(targetVal - value > 0) value = value + 1;
-				else if(targetVal - value < 0) value = value -1;
+			} else {
+				if (targetVal - value > 0) value = value + 1;
+				else if (targetVal - value < 0) value = value - 1;
 			}
-			
-			imgData.data[index * 4] = value
+			// if(targetVal - value)
+
+			imgData.data[index * 4] = value;
 		}
 	}
 
@@ -185,6 +188,7 @@ async function loop() {
 
 	// drawPoses(multiPersonSegmentation, flipHorizontally, ctx);
 
+	shaderMaterial.uniforms.uTime.value += 1/60;
 	renderer.render(scene, camera);
 
 	requestAnimationFrame(loop);
