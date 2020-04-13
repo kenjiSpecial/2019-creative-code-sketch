@@ -5,6 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "11": "parcel src/11-demo/index.html --no-hmr --port 1234  --out-dir sketches/11-demo",
     "01": "parcel src/01-typography/index.html --no-hmr --port 1234  --out-dir sketches/01-typography",
     "02": "parcel src/02-color/index.html --no-hmr --port 1234  --out-dir sketches/02-color",
     "04": "parcel src/04-line/index.html --no-hmr --port 1234  --out-dir sketches/04-line",
@@ -20,6 +21,7 @@
     "d05": "rm -rf sketches/05-camera/*.js && rm -rf sketches/05-camera/*.js.map && parcel build src/05-camera/01-emoji/index.html --out-dir sketches/05-camera --public-url ./  --no-source-maps",
     "d0501": "rm -rf sketches/05-emoji-tensorflow/*.js sketches/05-emoji-tensorflow/*.js.map && parcel build src/05-camera/01-emoji-tensorflow/index.html --out-dir sketches/05-emoji-tensorflow --public-url ./  --no-source-maps",
     "d06": "rm -rf sketches/06-logo/*.js sketches/06-logo/*.js.map && parcel build src/06-logo/index.html --out-dir sketches/06-logo --public-url ./  --no-source-maps",
+    "d11": "rm -rf sketches/11-demo/* && parcel build src/11-demo/index.html --out-dir sketches/11-demo --public-url ./  --no-source-maps",
     "dist": "python -m SimpleHTTPServer 8200"
   },
   "dependencies": {
@@ -46,7 +48,8 @@
     "tfjs": "^0.6.0",
     "three": "^0.113.2",
     "three-orbit-controls": "^82.1.0",
-    "three-orbitcontrols": "^2.110.1"
+    "three-orbitcontrols": "^2.110.1",
+    "wolfy87-eventemitter": "^5.2.9"
   },
   "devDependencies": {
     "@types/react": "^16.9.11",
