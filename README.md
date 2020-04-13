@@ -30,3 +30,6 @@ https://www.youtube.com/watch?time_continue=106&v=T2qQGqZxkD0
 
 ### #08 Camera & Tensorflow
 [Demo](https://kenjispecial.github.io/2019-creative-code-sketch/sketches/05-emoji-tensorflow/)
+
+### #11 Social Distance
+[Demo](https://www.kenji-special.info/2019-creative-code-sketch/sketches/11-demo/)
