@@ -34,15 +34,16 @@ export default class App {
 		this.renderer.render(this.scene, this.camera);
 
 		this.animateIn();
+
 		var self = this;
 		window.addEventListener('beforeunload', function (e) {
 			// e.preventDefault();
 			// e.returnValue = '';
 			self.firebase.removePlayer();
-			
+
 			// alert('test')
-			
 		});
+		this.makeGrid();
 	}
 
 	makeRenderer() {
@@ -92,11 +93,12 @@ export default class App {
 	}
 
 	makeGrid() {
-		var size = 1000;
+		var size = 40;
 		var divisions = 20;
 
 		var gridHelper = new THREE.GridHelper(size, divisions);
 		this.scene.add(gridHelper);
+		gridHelper.position.y = -0.5;
 	}
 
 	animateIn() {
@@ -148,43 +150,115 @@ export default class App {
 	}
 
 	updatePlayer() {
-		let newDataSize = 0;
+		const curDataCollection = [];
 		for (const key in this.firebase.datas) {
-			newDataSize = newDataSize + 1;
+			const data = { key: key, name: this.firebase.datas[key].name };
+			curDataCollection.push(data);
 		}
 
-		if (this.players.length < newDataSize) {
-			const toAddPlayerSize = newDataSize - this.players.length;
-			console.log(toAddPlayerSize);
-			for (let ii = 0; ii < toAddPlayerSize; ii = ii + 1) {
-				// var sphere = new THREE.SphereGeometry(1);
-				// var mat =
-				let geometry = new THREE.BoxGeometry(1, 1, 1);
-				const color = new THREE.Color(Math.random(), Math.random(), Math.random());
-				let mat = new THREE.MeshBasicMaterial({color: color});
-				var mesh = new THREE.Mesh(geometry, mat);
-				mesh.position.x = this.players.length * 3;
+		if (this.players.length < curDataCollection.length) {
+			// const toAddPlayerSize = newDataSize - this.players.length;
 
-				this.players.push(mesh);
-				this.scene.add(mesh);
+			for (let ii = 0; ii < curDataCollection.length; ii = ii + 1) {
+				const curData = curDataCollection[ii];
+				let isNewData = true;
+
+				for (let j = 0; j < this.players.length; j = j + 1) {
+					if (this.players[j].key == curData.key) {
+						isNewData = false;
+					}
+				}
+
+				if (isNewData) {
+					let geometry = new THREE.BoxGeometry(1, 1, 1);
+					const color = new THREE.Color(Math.random(), Math.random(), Math.random());
+
+					var textureCanvas = document.createElement('canvas');
+					textureCanvas.width = 256;
+					textureCanvas.height = 256;
+					var ctx = textureCanvas.getContext('2d');
+					ctx.font = 'normal bold 80px sans-serif';
+					ctx.textAlign = 'center';
+
+					ctx.fillStyle = '#ffffff';
+					ctx.fillText(curData.name, 256 / 2, 256 / 2 + 30);
+
+
+					console.log(textureCanvas);
+					const tex = new THREE.Texture( textureCanvas);
+					tex.needsUpdate = true;
+					let mat = new THREE.MeshBasicMaterial({
+						map: tex,
+					});
+					console.log(curData);
+					var mesh = new THREE.Mesh(geometry, mat);
+					mesh.position.x = this.players.length * 3;
+
+					this.players.push({
+						key: curData.key,
+						name: curData.name,
+						mesh: mesh,
+					});
+					gsap.from(mesh.scale, {duration: 0.8, x: 0.01, y: 0.01, z:0.01, ease: 'power2.inOut'});
+
+					this.scene.add(mesh);
+				}
 			}
 
+			gsap.killTweensOf(this.camera.position, "x,y,z");
+			gsap.to(this.camera.position, {
+				x: ((this.players.length - 1) * 3) / 2,
+				y: this.players.length * 1 + 3,
+				z: this.players.length * 1 + 5,
+				duration: 1.2,
+				ease: 'power2.inOut',
+				onUpdate: () => {
+					this.camera.lookAt(new THREE.Vector3(this.camera.position.x, 0, 0));
+				},
+			});
+		} else if (this.players.length > curDataCollection.length) {
+			const newPlayers = [];
+			for (let ii = 0; ii < this.players.length; ii = ii + 1) {
+				const player = this.players[ii];
+				let isRemove = true;
+				for (let j = 0; j < curDataCollection.length; j++) {
+					if (curDataCollection[j].key === player.key) {
+						isRemove = false;
+					}
+				}
 
-
-			gsap.to(this.camera.position, {x: (this.players.length - 1) * 3/2, y: this.players.length * 1 + 3, z: this.players.length * 1 + 5, duration: 1.2, ease: 'power2.inOut', onUpdate: ()=>{
-				this.camera.lookAt(new THREE.Vector3(this.camera.position.x, 0, 0));
-			}})
-		} else if(this.players.length > newDataSize) {
-			const removeToNumber = this.players.length - newDataSize;
-			for(var ii = 0; ii < removeToNumber; ii = ii + 1){
-				const mesh = this.players.pop();
-				this.scene.remove(mesh);
+				if (isRemove) {
+					const mesh = player.mesh;
+					gsap.killTweensOf(mesh.scale, "x,y,z");
+					gsap.to(mesh.scale, {duration: 0.8, x: 0.01, y: 0.01, z:0.01, ease: 'power2.out', onComplete: ()=>{
+						this.scene.remove(mesh);
+					}})
+				} else {
+					newPlayers.push(player);
+				}
 			}
 
-			gsap.to(this.camera.position, {x: (this.players.length - 1) * 3/2, y: this.players.length * 1 + 3, z: this.players.length * 1 + 5, duration: 1.2, ease: 'power2.inOut', onUpdate: ()=>{
-				this.camera.lookAt(new THREE.Vector3(this.camera.position.x, 0, 0));
-			}})
-			console.log('removePlayer');
+			// updateposition
+			this.players = newPlayers;
+			for (let ii = 0; ii < this.players.length; ii = ii + 1) {
+				gsap.to(this.players[ii].mesh.position, {
+					x: ii * 3,
+					ease: 'power4.inOut',
+					duration: 0.8,
+				});
+			}
+
+			gsap.killTweensOf(this.camera.position, "x,y,z");
+			gsap.to(this.camera.position, {
+				x: ((this.players.length - 1) * 3) / 2,
+				y: this.players.length * 1 + 3,
+				z: this.players.length * 1 + 5,
+				duration: 1.2,
+				ease: 'power2.inOut',
+				onUpdate: () => {
+					this.camera.lookAt(new THREE.Vector3(this.camera.position.x, 0, 0));
+				},
+			});
 		}
 	}
 }

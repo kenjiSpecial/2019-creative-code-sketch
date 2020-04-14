@@ -18,13 +18,10 @@ export class Firebase extends EventEmitter {
 
 		this.root.on('value', (snapshot) => {
 			const value = snapshot.val();
-			console.log(value);
 			this.datas = {};
 			for (const key in value) {
 				this.datas[key] = value[key];
 			}
-
-			console.log(this.datas);
 
 			this.emit('update');
 		});
@@ -35,7 +32,6 @@ export class Firebase extends EventEmitter {
 		playerRef.once('value', (snapshot) => {
 			const value = snapshot.val();
 			const key = snapshot.key;
-			console.log(key);
 			this.id = key;
 			this.emit('register');
 		});
@@ -45,7 +41,7 @@ export class Firebase extends EventEmitter {
 	}
 
 	public removePlayer() {
-		console.log(this.id);
+		// console.log(this.id);
 		if (this.id) {
 			const database = firebase.database();
 			database
