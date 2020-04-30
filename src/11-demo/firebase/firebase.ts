@@ -5,8 +5,11 @@ import EventEmitter from 'wolfy87-eventemitter';
 
 export class Firebase extends EventEmitter {
 	private database: firebase.database.Database;
-	private root: firebase.database.Reference;
+	private players: firebase.database.Reference;
+	private messages: firebase.database.Reference;
+	private playerRef: firebase.database.Reference;
 	private id: string;
+	private messageID: string;
 	public datas = {};
 
 	constructor() {
@@ -14,9 +17,10 @@ export class Firebase extends EventEmitter {
 
 		firebase.initializeApp(firebaseConfig);
 		this.database = firebase.database();
-		this.root = this.database.ref('players');
+		this.players = this.database.ref('players');
+		// this.messages = this.database.ref('messages');
 
-		this.root.on('value', (snapshot) => {
+		this.players.on('value', (snapshot) => {
 			const value = snapshot.val();
 			this.datas = {};
 			for (const key in value) {
@@ -28,7 +32,7 @@ export class Firebase extends EventEmitter {
 	}
 
 	public addPlayer(name: string) {
-		const playerRef = this.root.push();
+		const playerRef = this.players.push();
 		playerRef.once('value', (snapshot) => {
 			const value = snapshot.val();
 			const key = snapshot.key;
@@ -36,8 +40,10 @@ export class Firebase extends EventEmitter {
 			this.emit('register');
 		});
 		playerRef.set({
-			name,
+			name: name,
+			message: '',
 		});
+		this.playerRef = playerRef;
 	}
 
 	public removePlayer() {
@@ -56,5 +62,17 @@ export class Firebase extends EventEmitter {
 			// this.database.ref(`players/${this.id}`).remove();
 			this.id = null;
 		}
+	}
+
+	public getID() {
+		return this.id;
+	}
+
+	public updateMessage(message: string) {
+		
+		this.playerRef.once('value')
+		this.playerRef.set({
+			message: message,
+		});		
 	}
 }

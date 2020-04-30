@@ -15,25 +15,7 @@ function init() {
 	});
 
 	const appEl = document.getElementById('root');
-	appEl.appendChild(app.dom);
-
-	var isSend = false;
-	var btn = document.getElementById('btn');
-	var inputText = document.getElementById('inputText');
-
-	btn.addEventListener('click', function () {
-		if (isSend) {
-			return;
-		}
-
-		isSend = true;
-		app.addPlayer(inputText.value);
-	});
-	var form = document.getElementById('form');
-	form.addEventListener('submit', function (event) {
-		console.log('submit');
-		event.preventDefault();
-	});
+	appEl.appendChild(app.dom);	
 }
 
 function start() {

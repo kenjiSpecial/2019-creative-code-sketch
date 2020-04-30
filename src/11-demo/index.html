@@ -22,11 +22,16 @@
         top: 0;
         left: 0;
     }
+
+    #form-message{
+        display: none;
+    }
 </style>
 <body>
     <div id="root"></div>
     <div id="form" name='myform'>
-        <div>名前を入力してください。</div>
+        <div id="form-name">名前を入力してください。</div>
+        <div id="form-message">メッセージを入力してください。</div>
         <div class="form-input">
             <form>
                 <input id='inputText' type="text" />

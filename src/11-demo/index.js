@@ -20,16 +20,26 @@ export default class App {
 		this.makeCamera();
 		this.makeUtils();
 		this.resize();
+		var inputText = document.getElementById('inputText');
+		var isRegister = false;
+		var btn = document.getElementById('btn');
+		var inputText = document.getElementById('inputText');
 
 		this.firebase = new Firebase();
 		this.firebase.on('update', () => {
 			this.updatePlayer();
 		});
 		this.firebase.on('register', () => {
-			var form = document.getElementById('form');
-			form.style.display = 'none';
+			var formName = document.getElementById('form-name');
+			formName.style.display = 'none';
 
-			// this.animateIn();
+			var formMessage = document.getElementById('form-message');
+			formMessage.style.display = 'block';
+
+			// var btn = document.getElementById('btn')
+			// btn.style.display = 'none';
+
+			inputText.value = '';
 		});
 		this.renderer.render(this.scene, this.camera);
 
@@ -43,7 +53,35 @@ export default class App {
 
 			// alert('test')
 		});
+		inputText.addEventListener('change', function () {
+			// self.updateMessage(inputText.value);
+		});
 		this.makeGrid();
+
+		btn.addEventListener('click', function () {
+			if (isRegister) {
+				self.updateMessage(inputText.value);
+				return;
+			}
+
+			isRegister = true;
+
+			if (self.firebase.getID()) {
+				self.updateMessage(inputText.value);
+			} else {
+				self.addPlayer(inputText.value);
+			}
+		});
+		var form = document.getElementById('form');
+		form.addEventListener('submit', function (event) {
+			event.preventDefault();
+		});
+	}
+
+	updateMessage(value) {
+		console.log(value);
+
+		this.firebase.updateMessage(value);
 	}
 
 	makeRenderer() {
@@ -157,8 +195,6 @@ export default class App {
 		}
 
 		if (this.players.length < curDataCollection.length) {
-			// const toAddPlayerSize = newDataSize - this.players.length;
-
 			for (let ii = 0; ii < curDataCollection.length; ii = ii + 1) {
 				const curData = curDataCollection[ii];
 				let isNewData = true;
@@ -177,35 +213,51 @@ export default class App {
 					textureCanvas.width = 256;
 					textureCanvas.height = 256;
 					var ctx = textureCanvas.getContext('2d');
-					ctx.font = 'normal bold 80px sans-serif';
+					ctx.font = 'normal bold 60px sans-serif';
 					ctx.textAlign = 'center';
 
 					ctx.fillStyle = '#ffffff';
-					ctx.fillText(curData.name, 256 / 2, 256 / 2 + 30);
+					ctx.fillText(curData.name, 256 / 2, 256 / 2 + 20);
 
-
-					console.log(textureCanvas);
-					const tex = new THREE.Texture( textureCanvas);
+					const tex = new THREE.Texture(textureCanvas);
 					tex.needsUpdate = true;
 					let mat = new THREE.MeshBasicMaterial({
 						map: tex,
 					});
-					console.log(curData);
 					var mesh = new THREE.Mesh(geometry, mat);
 					mesh.position.x = this.players.length * 3;
+					
+					gsap.from(mesh.scale, {
+						duration: 0.8,
+						x: 0.01,
+						y: 0.01,
+						z: 0.01,
+						ease: 'power2.inOut',
+					});
 
+					this.scene.add(mesh);
+
+					const textCanvas = document.createElement('canvas');
+					textureCanvas.width = 256;
+					textureCanvas.height = 256;
+
+					this.updateText(textCanvas);
+
+					
+					
 					this.players.push({
 						key: curData.key,
 						name: curData.name,
 						mesh: mesh,
+						textCanvas: textCanvas
 					});
-					gsap.from(mesh.scale, {duration: 0.8, x: 0.01, y: 0.01, z:0.01, ease: 'power2.inOut'});
+				} else {
 
-					this.scene.add(mesh);
+					console.log(curData);
 				}
 			}
 
-			gsap.killTweensOf(this.camera.position, "x,y,z");
+			gsap.killTweensOf(this.camera.position, 'x,y,z');
 			gsap.to(this.camera.position, {
 				x: ((this.players.length - 1) * 3) / 2,
 				y: this.players.length * 1 + 3,
@@ -229,10 +281,17 @@ export default class App {
 
 				if (isRemove) {
 					const mesh = player.mesh;
-					gsap.killTweensOf(mesh.scale, "x,y,z");
-					gsap.to(mesh.scale, {duration: 0.8, x: 0.01, y: 0.01, z:0.01, ease: 'power2.out', onComplete: ()=>{
-						this.scene.remove(mesh);
-					}})
+					gsap.killTweensOf(mesh.scale, 'x,y,z');
+					gsap.to(mesh.scale, {
+						duration: 0.8,
+						x: 0.01,
+						y: 0.01,
+						z: 0.01,
+						ease: 'power2.out',
+						onComplete: () => {
+							this.scene.remove(mesh);
+						},
+					});
 				} else {
 					newPlayers.push(player);
 				}
@@ -248,7 +307,7 @@ export default class App {
 				});
 			}
 
-			gsap.killTweensOf(this.camera.position, "x,y,z");
+			gsap.killTweensOf(this.camera.position, 'x,y,z');
 			gsap.to(this.camera.position, {
 				x: ((this.players.length - 1) * 3) / 2,
 				y: this.players.length * 1 + 3,
@@ -259,6 +318,16 @@ export default class App {
 					this.camera.lookAt(new THREE.Vector3(this.camera.position.x, 0, 0));
 				},
 			});
+		} else {
+
 		}
+	}
+
+	updateText(canvas){
+		var ctx = canvas.getContext('2d');
+		ctx.font = 'normal bold 60px sans-serif';
+		ctx.textAlign = 'center';
+
+
 	}
 }

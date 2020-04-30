@@ -1,1 +1,42 @@
-<html><style>*{margin:0}body,html{width:100%;height:100%;overflow:hidden}canvas{display:block}#form,#root{position:absolute;top:0;left:0}</style><body> <div id="root"></div> <div id="form" name="myform"> <div>名前を入力してください。</div> <div class="form-input"> <form> <input id="inputText" type="text"> <button id="btn">送信</button> </form> </div> </div> <script src="demo.1a303fe6.js"></script> </body></html>
+<html>
+<style>*{
+        margin: 0;
+    }
+    html, body{
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    canvas{
+        display: block;
+    }
+    #root{
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    #form {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    #form-message{
+        display: none;
+    }</style>
+<body>
+    <div id="root"></div>
+    <div id="form" name="myform">
+        <div id="form-name">名前を入力してください。</div>
+        <div id="form-message">メッセージを入力してください。</div>
+        <div class="form-input">
+            <form>
+                <input id="inputText" type="text">
+                <button id="btn">送信</button>
+            </form>
+        </div>
+    </div>
+    <script src="/demo.d3b53871.js"></script>
+</body>
+</html>
